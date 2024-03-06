@@ -30,7 +30,7 @@
                 .then((data) => {
                     const wordData = Object.keys(data).map((key) => ({
                         text: key,
-                        size: 10 + data[key] * 1366.6,
+                        size: 10 + data[key] * 90,
                     }));
 
                     generateWordCloud(wordData);
