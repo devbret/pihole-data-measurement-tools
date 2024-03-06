@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>TLD Word Cloud with D3.js</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+        <style>
+            body {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vw;
+            }
+
+            svg {
+                width: 100%;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <svg></svg>
+        <script>
+            const jsonFile = 'tlds_average_reply_time.json';
+
+            fetch(jsonFile)
+                .then((response) => response.json())
+                .then((data) => {
+                    const wordData = Object.keys(data).map((key) => ({
+                        text: key,
+                        size: 10 + data[key] * 1366.6,
+                    }));
+
+                    generateWordCloud(wordData);
+                })
+                .catch((error) => console.error('Error loading the JSON file:', error));
+
+            function generateWordCloud(data) {
+                var svg = d3.select('svg'),
+                    width = document.body.clientWidth,
+                    height = document.body.clientHeight;
+
+                var layout = d3.layout
+                    .cloud()
+                    .size([width, height])
+                    .words(data)
+                    .padding(5)
+                    .rotate(() => ~~(Math.random() * 2) * 90)
+                    .font('Impact')
+                    .fontSize((d) => d.size)
+                    .on('end', draw);
+
+                layout.start();
+
+                function draw(words) {
+                    svg.attr('width', layout.size()[0])
+                        .attr('height', layout.size()[1])
+                        .append('g')
+                        .attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')')
+                        .selectAll('text')
+                        .data(words)
+                        .enter()
+                        .append('text')
+                        .style('font-size', (d) => d.size + 'px')
+                        .style('font-family', 'Impact')
+                        .style('fill', (d, i) => d3.schemeCategory10[i % 10])
+                        .attr('text-anchor', 'middle')
+                        .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+                        .text((d) => d.text);
+                }
+            }
+        </script>
+    </body>
+</html>
