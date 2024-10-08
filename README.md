@@ -1,7 +1,9 @@
 # Pi-hole Data Measurement Tools
+
 Different software tools for measuring DNS queries downloaded from a Pi-hole as a CSV file.
 
 ## Downloading Your Pi-hole Data
+
 I am following these instructions from GPT-4:
 
 1 - **Access Pi-hole Admin Interface:**
@@ -26,15 +28,15 @@ You can use the sqlite3 command to interact with the database and export the DNS
 
 Once inside the SQLite prompt, you can run a query to export the data. For example:
 
->.headers on
+> .headers on
 
->.mode csv
+> .mode csv
 
->.output my_dns_queries.csv
+> .output my_dns_queries.csv
 
->SELECT * FROM queries;
+> SELECT \* FROM queries;
 
->.quit
+> .quit
 
 This command sequence sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named my_dns_queries.csv, selects all records from the queries table, and then exits SQLite.
 

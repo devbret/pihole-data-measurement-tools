@@ -8,6 +8,7 @@ def build_tree_structure(domain, subdomains):
     for subdomain in subdomains:
         parts = subdomain.split('.')
         current_node = root
+        
         for part in reversed(parts):
             found = None
             for child in current_node["children"]:
@@ -40,13 +41,13 @@ def process_csv(csv_file, selected_domain):
 
     if subdomains:
         tree_structure = build_tree_structure(selected_domain, subdomains)
-        filename = f"{selected_domain.replace('.', '_')}_domain_tree.json"
+        filename = "domain_tree.json"
         save_to_json(tree_structure, filename)
         print(f"JSON file '{filename}' has been created.")
     else:
         print(f"No records found for domain {selected_domain} in the CSV file.")
 
-csv_file = "dns_queries.csv"
+csv_file = ""
 
 selected_domain = input("Please enter the domain you want to create a tree for: ")
 

@@ -42,7 +42,7 @@
 
             var treemap = d3.tree().size([height, width]);
 
-            d3.json('example_com_domain_tree.json').then(function (treeData) {
+            d3.json('domain_tree.json').then(function (treeData) {
                 root = d3.hierarchy(treeData, function (d) {
                     return d.children;
                 });

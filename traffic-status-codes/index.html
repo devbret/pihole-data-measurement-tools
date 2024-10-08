@@ -33,6 +33,9 @@
                 const keys = ['0', '1', '2', '3'];
 
                 data.forEach((d) => {
+                    keys.forEach((key) => {
+                        d[key] = d[key] || 0;
+                    });
                     d.total = keys.map((key) => d[key]).reduce((a, b) => a + b, 0);
                 });
 
@@ -51,8 +54,8 @@
                     .enter()
                     .append('rect')
                     .attr('x', (d) => x(d.data.hour))
-                    .attr('y', (d) => y(d[1]))
-                    .attr('height', (d) => y(d[0]) - y(d[1]))
+                    .attr('y', (d) => (isNaN(y(d[1])) ? 0 : y(d[1])))
+                    .attr('height', (d) => (isNaN(y(d[0]) - y(d[1])) ? 0 : y(d[0]) - y(d[1])))
                     .attr('width', x.bandwidth())
                     .append('title')
                     .text((d) => `${d.data.hour}: ${d[1] - d[0]}`);
