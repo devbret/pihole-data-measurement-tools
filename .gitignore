@@ -4,3 +4,4 @@ slow-domains/tlds_average_reply_times.json
 subdomains/domain_tree.json
 traffic-status-codes/status_counts_by_hour.json
 client-traffic-by-day/client_dns_query_counts.json
+blocked-domains/tlds_blocked_counts.json

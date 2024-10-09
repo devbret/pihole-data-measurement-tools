@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TLD Block Count Word Cloud</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+        <style>
+            body {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+            .tooltip {
+                position: absolute;
+                background: #f9f9f9;
+                padding: 5px;
+                border: 1px solid #d3d3d3;
+                border-radius: 3px;
+                pointer-events: none;
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <svg></svg>
+        <script>
+            const jsonFile = 'tlds_blocked_counts.json';
+
+            fetch(jsonFile)
+                .then((response) => response.json())
+                .then((data) => {
+                    const values = Object.values(data);
+
+                    const minValue = Math.min(...values);
+                    const maxValue = Math.max(...values);
+
+                    const wordData = Object.keys(data).map((key) => ({
+                        text: key,
+                        size: 10 + ((data[key] - minValue) / (maxValue - minValue)) * (100 - 10),
+                        value: data[key],
+                    }));
+
+                    generateWordCloud(wordData);
+                })
+                .catch((error) => console.error('Error loading the JSON file:', error));
+
+            function generateWordCloud(data) {
+                var svg = d3.select('svg'),
+                    width = document.body.clientWidth,
+                    height = document.body.clientHeight;
+
+                var tooltip = d3.select('body').append('div').attr('class', 'tooltip');
+
+                var layout = d3.layout
+                    .cloud()
+                    .size([width, height])
+                    .words(data)
+                    .padding(5)
+                    .rotate(() => ~~(Math.random() * 2) * 90)
+                    .font('Impact')
+                    .fontSize((d) => d.size)
+                    .on('end', draw);
+
+                layout.start();
+
+                function draw(words) {
+                    svg.attr('width', layout.size()[0])
+                        .attr('height', layout.size()[1])
+                        .append('g')
+                        .attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')')
+                        .selectAll('text')
+                        .data(words)
+                        .enter()
+                        .append('text')
+                        .style('font-size', (d) => d.size + 'px')
+                        .style('font-family', 'Impact')
+                        .style('fill', (d, i) => d3.schemeCategory10[i % 10])
+                        .attr('text-anchor', 'middle')
+                        .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+                        .text((d) => d.text)
+                        .on('mouseover', function (event, d) {
+                            tooltip.transition().duration(200).style('opacity', 1);
+                            tooltip
+                                .html('TLD: ' + d.text + '<br>' + 'Blocked: ' + d.value + ' times')
+                                .style('left', event.pageX + 10 + 'px')
+                                .style('top', event.pageY - 10 + 'px');
+                        })
+                        .on('mouseout', function () {
+                            tooltip.transition().duration(200).style('opacity', 0);
+                        });
+                }
+            }
+        </script>
+    </body>
+</html>
