@@ -1,49 +1,41 @@
 # Pi-hole Data Measurement Tools
 
-Different software tools for measuring DNS queries downloaded from a Pi-hole as a CSV file.
+A collection of various software tools for measuring DNS queries downloaded from a Pi-hole as a CSV file.
 
 ## Downloading Your Pi-hole Data
 
-I am following these instructions from GPT-4:
+These instructions were originally sourced from ChatGPT. But have since been improved to handle possible challenges/errors and improve readability.
 
 1 - **Access Pi-hole Admin Interface:**
 
-First, ensure you can access the Pi-hole admin interface. This is usually accessed via http://<your-pi's-ip-address>/admin from a browser within the same network.
+First, ensure you can access the Pi-hole admin interface. This is usually accessed via `http://<your-pi's-ip-address>/admin` from a browser within the same local area network.
 
-2 - **Use the Web Interface:**
+2 - **Use The Web Interface:**
 
 Go to the "Query Log" section. Here, you can see recent queries, but for a complete download, you'll need to access the underlying data directly from the database.
 
-3 - **Access the Pi-hole Terminal:**
+3 - **Access The Pi-hole Terminal:**
 
-SSH into your Raspberry Pi by using a command like ssh pi@<your-pi's-ip-address> from a terminal on your computer (replace <your-pi's-ip-address> with the actual IP address of your Raspberry Pi).
+SSH into your Raspberry Pi by using a command like `ssh username@<your-pi's-ip-address>` from a terminal on your computer. Make sure to replace <your-pi's-ip-address> with the actual IP address of your Raspberry Pi.
 
-4 - **Navigate to the Pi-hole Database:**
+4 - **Export DNS Queries:**
 
-Pi-hole stores its data in a SQLite database usually located at /etc/pihole/pihole-FTL.db.
+You then can interact with the database and export your DNS queries, for example, by running this command:
 
-5 - **Export DNS Queries:**
+> sqlite3 /etc/pihole/pihole-FTL.db -header -csv "SELECT \* FROM queries;" > /home/usernamei/my_dns_queries.csv
 
-You can use the sqlite3 command to interact with the database and export the DNS queries. First, access the database with sqlite3 /etc/pihole/pihole-FTL.db.
+This command sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named "my_dns_queries.csv" and selects all records from the queries table.
 
-Once inside the SQLite prompt, you can run a query to export the data. For example:
+5 - **Retrieve The Exported File:**
 
-> .headers on
+After exporting you can use scp (secure copy) to transfer this file to your local machine. For example, you could run this command in your computer's terminal:
 
-> .mode csv
+> scp username@<your-pi's-ip-address>:/path/to/my_dns_queries.csv /local/destination.
 
-> .output my_dns_queries.csv
+If you are having trouble transferring your DNS queries CSV file, it might be helpful to run the following command on the Raspberry Pi to ensure you have the correct permissions:
 
-> SELECT \* FROM queries;
+> chmod 644 /home/username/my_dns_queries.csv
 
-> .quit
+6 - **Analyze The Data:**
 
-This command sequence sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named my_dns_queries.csv, selects all records from the queries table, and then exits SQLite.
-
-6 - **Retrieve the Exported File:**
-
-After exporting, you'll find my_dns_queries.csv in the directory where you ran the SQLite command. You can use scp (secure copy) to transfer this file to your local machine, e.g., scp pi@<your-pi's-ip-address>:/path/to/my_dns_queries.csv /local/destination.
-
-7 - **Analyze the Data:**
-
-You can now open my_dns_queries.csv with any program that supports CSV files (like Microsoft Excel, Google Sheets, or a text editor) to analyze your DNS query records.
+To use any of the tools in this repo, you will need to ensure the transferred "my_dns_queries.csv" file is in the `/data` directory.
