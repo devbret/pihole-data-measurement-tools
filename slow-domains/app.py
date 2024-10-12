@@ -37,7 +37,7 @@ def process_csv_to_json(csv_file, json_file):
     average_times = calculate_average_reply_times(csv_file)
     write_tlds_to_json(average_times, json_file)
 
-csv_file = ''
+csv_file = '../data/my_dns_queries.csv'
 json_file = 'tlds_average_reply_times.json'
 
 process_csv_to_json(csv_file, json_file)

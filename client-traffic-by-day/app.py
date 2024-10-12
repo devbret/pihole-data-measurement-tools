@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import json
 
-df = pd.read_csv('')
+df = pd.read_csv('../data/my_dns_queries.csv')
 
 df['date'] = df['timestamp'].apply(lambda x: datetime.fromtimestamp(x).strftime('%Y-%m-%d'))
 

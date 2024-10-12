@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 
-df = pd.read_csv('')
+df = pd.read_csv('../data/my_dns_queries.csv')
 
 df['hour'] = df['timestamp'].apply(lambda x: datetime.fromtimestamp(x).hour)
 

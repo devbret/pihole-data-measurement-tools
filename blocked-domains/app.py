@@ -31,7 +31,7 @@ def process_csv_to_json(csv_file, json_file):
     write_tlds_to_json(tld_blocks, json_file)
 
 
-csv_file = '' 
+csv_file = '../data/my_dns_queries.csv' 
 json_file = 'tlds_blocked_counts.json'
 
 process_csv_to_json(csv_file, json_file)

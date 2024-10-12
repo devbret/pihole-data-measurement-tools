@@ -47,7 +47,7 @@ def process_csv(csv_file, selected_domain):
     else:
         print(f"No records found for domain {selected_domain} in the CSV file.")
 
-csv_file = ""
+csv_file = "../data/my_dns_queries.csv"
 
 selected_domain = input("Please enter the domain you want to create a tree for: ")
 
