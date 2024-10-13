@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DNS Queries Heatmap</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            .heatmap {
+                font-family: Arial, sans-serif;
+            }
+            .axis text {
+                font-size: 12px;
+            }
+            .cell {
+                stroke: #e3e3e3;
+                stroke-width: 1px;
+            }
+            .dayLabel {
+                text-anchor: end;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="heatmap"></div>
+
+        <script>
+            const margin = { top: 0, right: 0, bottom: 0, left: 100 },
+                width = window.innerWidth - margin.left - margin.right,
+                height = window.innerHeight - margin.top - margin.bottom;
+
+            const gridSizeX = Math.floor(width / 144),
+                gridSizeY = Math.floor(height / 7),
+                days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+            const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0, 100]);
+
+            const svg = d3
+                .select('#heatmap')
+                .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            svg.selectAll('.dayLabel')
+                .data(days)
+                .enter()
+                .append('text')
+                .text((d) => d)
+                .attr('x', 0)
+                .attr('y', (d, i) => i * gridSizeY)
+                .attr('class', 'dayLabel')
+                .attr('transform', `translate(-6,${gridSizeY / 1.5})`)
+                .style('text-anchor', 'end');
+
+            const returnZero = () => '00';
+
+            d3.json('dns_heatmap_data.json').then((data) => {
+                svg.selectAll('.cell')
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr('x', (d) => d.time_slot * gridSizeX)
+                    .attr('y', (d) => days.indexOf(d.day) * gridSizeY)
+                    .attr('class', 'cell')
+                    .attr('width', gridSizeX)
+                    .attr('height', gridSizeY)
+                    .style('fill', (d) => colorScale(d.count))
+                    .append('title')
+                    .text(
+                        (d) =>
+                            `${d.day}, ${Math.floor(d.time_slot / 6)}:${(d.time_slot % 6) * 10 > 0 ? (d.time_slot % 6) * 10 : returnZero()} - ${
+                                d.count
+                            } queries`
+                    );
+            });
+
+            window.addEventListener('resize', function () {
+                const newWidth = window.innerWidth - margin.left - margin.right;
+                const newHeight = window.innerHeight - margin.top - margin.bottom;
+
+                const newGridSizeX = Math.floor(newWidth / 144);
+                const newGridSizeY = Math.floor(newHeight / 7);
+
+                d3.select('svg')
+                    .attr('width', newWidth + margin.left + margin.right)
+                    .attr('height', newHeight + margin.top + margin.bottom);
+
+                svg.selectAll('.cell')
+                    .attr('x', (d) => d.time_slot * newGridSizeX)
+                    .attr('y', (d) => days.indexOf(d.day) * newGridSizeY)
+                    .attr('width', newGridSizeX)
+                    .attr('height', newGridSizeY);
+
+                svg.selectAll('.dayLabel')
+                    .attr('y', (d, i) => i * newGridSizeY)
+                    .attr('transform', `translate(-6,${newGridSizeY / 1.5})`);
+            });
+        </script>
+    </body>
+</html>
