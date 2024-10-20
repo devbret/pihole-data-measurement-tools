@@ -1,5 +1,7 @@
 # Pi-hole Data Measurement Tools
 
+![Heatmap of DNS queries, organized in ten minute intervals for each day of the week.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/9bd87c0f-4ca4-4762-a011-755e44b6c691.png)
+
 A collection of various software tools for measuring DNS queries downloaded from a Pi-hole as a CSV file.
 
 ## Downloading Your Pi-hole Data
