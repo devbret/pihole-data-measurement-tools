@@ -4,11 +4,6 @@ This app processes and visualizes the most commonly blocked domains from your Pi
 
 ## Set Up
 
-### Programs Needed
-
--   [Git](https://git-scm.com/downloads)
--   [Python](https://www.python.org/downloads/) (When installing on Windows, make sure you check the ["Add python 3.xx to PATH"](https://hosting.photobucket.com/images/i/bernhoftbret/python.png) box.)
-
 ### Steps
 
 1 - Open a terminal and navigate to this directory.
