@@ -24,7 +24,7 @@ SSH into your Raspberry Pi by using a command like `ssh username@<your-pi's-ip-a
 
 You then can interact with the database and export your DNS queries, for example, by running this command:
 
-> sqlite3 /etc/pihole/pihole-FTL.db -header -csv "SELECT \* FROM queries;" > /home/username/my_dns_queries.csv
+> sudo sqlite3 /etc/pihole/pihole-FTL.db -header -csv "SELECT * FROM queries;" > /home/username/my_dns_queries.csv
 
 This command sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named "my_dns_queries.csv" and selects all records from the queries table.
 
