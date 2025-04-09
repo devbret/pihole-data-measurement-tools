@@ -1,0 +1,27 @@
+body {
+  font-family: Arial, sans-serif;
+}
+.bar {
+  fill: steelblue;
+}
+.bar:hover {
+  fill: darkorange;
+}
+.axis-label {
+  font-size: 12px;
+}
+.chart-title {
+  text-anchor: middle;
+  font-size: 16px;
+  font-weight: bold;
+}
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 4px;
+  pointer-events: none;
+}

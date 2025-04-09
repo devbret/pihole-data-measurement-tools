@@ -1,0 +1,13 @@
+.heatmap {
+  font-family: Arial, sans-serif;
+}
+.axis text {
+  font-size: 12px;
+}
+.cell {
+  stroke: #e3e3e3;
+  stroke-width: 1px;
+}
+.dayLabel {
+  text-anchor: end;
+}

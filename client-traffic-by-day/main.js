@@ -1,0 +1,97 @@
+const svg = d3.select("svg"),
+  margin = { top: 20, right: 20, bottom: 30, left: 50 },
+  width = +svg.attr("width") - margin.left - margin.right,
+  height = +svg.attr("height") - margin.top - margin.bottom;
+
+const g = svg
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
+const parseTime = d3.timeParse("%Y-%m-%d");
+const x = d3.scaleTime().range([0, width]);
+const y = d3.scaleLinear().range([height, 0]);
+const z = d3.scaleOrdinal(d3.schemeCategory10);
+
+const line = d3
+  .line()
+  .x((d) => x(d.date))
+  .y((d) => y(d.count));
+
+d3.json("client_dns_query_counts.json").then((data) => {
+  const clients = Object.keys(data);
+  const allData = clients.map((client) => {
+    return data[client].map((d) => ({
+      client,
+      date: parseTime(d.date),
+      count: d.count,
+    }));
+  });
+
+  const flatData = allData.flat();
+
+  x.domain(d3.extent(flatData, (d) => d.date));
+  y.domain([0, d3.max(flatData, (d) => d.count)]);
+
+  g.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x))
+    .append("text")
+    .attr("fill", "#000")
+    .attr("x", width)
+    .attr("y", -6)
+    .attr("text-anchor", "end")
+    .text("Date");
+
+  g.append("g")
+    .call(d3.axisLeft(y))
+    .append("text")
+    .attr("fill", "#000")
+    .attr("text-anchor", "end")
+    .attr("dy", "0.75em")
+    .attr("y", 6)
+    .text("Query Count");
+
+  const clientGroups = g
+    .selectAll(".client")
+    .data(allData)
+    .enter()
+    .append("g")
+    .attr("class", "client");
+
+  clientGroups
+    .append("path")
+    .attr("class", "line")
+    .attr("d", (d) => line(d))
+    .style("stroke", (d, i) => z(i));
+
+  const tooltip = d3
+    .select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  clientGroups
+    .selectAll(".dot")
+    .data((d) => d)
+    .enter()
+    .append("circle")
+    .attr("class", "dot")
+    .attr("cx", (d) => x(d.date))
+    .attr("cy", (d) => y(d.count))
+    .attr("r", 4)
+    .style("fill", (d, i, nodes) => z(nodes[i].parentNode.__data__[0].client))
+    .on("mouseover", (event, d) => {
+      tooltip.transition().duration(200).style("opacity", 0.9);
+      tooltip
+        .html(
+          `${d.client}<br/>${d3.timeFormat("%Y-%m-%d")(d.date)}<br/>Count: ${
+            d.count
+          }`
+        )
+        .style("left", event.pageX + 5 + "px")
+        .style("top", event.pageY - 28 + "px");
+    })
+    .on("mouseout", () => {
+      tooltip.transition().duration(500).style("opacity", 0);
+    });
+});

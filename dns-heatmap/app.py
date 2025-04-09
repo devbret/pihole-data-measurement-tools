@@ -10,13 +10,16 @@ def process_dns_data(csv_file):
         csv_reader = csv.DictReader(file)
         
         for row in csv_reader:
-            timestamp = int(row['timestamp'])
-            dt = datetime.fromtimestamp(timestamp)
-            
-            day_of_week = dt.strftime('%A')
-            time_slot = (dt.hour * 60 + dt.minute) // 10
-            
-            time_data[day_of_week][time_slot] += 1
+            try:
+                timestamp = float(row['timestamp'])
+                dt = datetime.fromtimestamp(timestamp)
+                
+                day_of_week = dt.strftime('%A')
+                time_slot = (dt.hour * 60 + dt.minute) // 10
+                
+                time_data[day_of_week][time_slot] += 1
+            except (ValueError, KeyError) as e:
+                print(f"Skipping row due to error: {e}")
     
     return time_data
 
