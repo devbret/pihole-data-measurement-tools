@@ -9,4 +9,5 @@ blocked-domains/tlds_blocked_counts.json
 dns-heatmap/dns_heatmap_data.json
 dns-responses-histogram/reply_time_distribution.json
 search-dns/filtered_dns_results.txt
+hourly-summaries/hourly_metrics.json
 venv/
