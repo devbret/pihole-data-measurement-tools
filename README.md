@@ -53,6 +53,6 @@ To use any of the tools in this repo, you will need to ensure the transferred "m
 
 1. Install the above programs.
 2. Open a shell window (For Windows open PowerShell, for MacOS open Terminal & for Linux open your distro's terminal emulator).
-3. Clone this repository using `git` by running the following command; `git clone https://github.com/devbret/pihole-data-measurement-tools`.
+3. Clone this repository using `git` by running the following command; `git clone git@github.com:devbret/pihole-data-measurement-tools.git`.
 4. Navigate to the repo's directory by running; `cd pihole-data-measurement-tools`.
 5. Install the needed dependencies for running the script by running; `pip install -r requirements.txt`.
