@@ -2,7 +2,7 @@
 
 ![Heatmap of DNS queries, organized in ten minute intervals for each day of the week.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/975f6680-240c-4507-8c73-eb3a1f2b80ba.jpg)
 
-A collection of various software tools for measuring DNS queries downloaded from a Pi-hole as a CSV file.
+A collection of various software tools for analyzing DNS queries downloaded from Pi-hole as a CSV file.
 
 ## Downloading Your Pi-hole Data
 
@@ -24,7 +24,7 @@ SSH into your Raspberry Pi by using a command like `ssh username@<your-pi's-ip-a
 
 You then can interact with the database and export your DNS queries, for example, by running this command:
 
-> sudo sqlite3 /etc/pihole/pihole-FTL.db -header -csv "SELECT * FROM queries;" > /home/username/my_dns_queries.csv
+> sudo sqlite3 /etc/pihole/pihole-FTL.db -header -csv "SELECT \* FROM queries;" > /home/username/my_dns_queries.csv
 
 This command sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named "my_dns_queries.csv" and selects all records from the queries table.
 
@@ -46,13 +46,18 @@ To use any of the tools in this repo, you will need to ensure the transferred "m
 
 ### Programs Needed
 
--   [Git](https://git-scm.com/downloads)
--   [Python](https://www.python.org/downloads/) (When installing on Windows, make sure you check the ["Add python 3.xx to PATH"](https://hosting.photobucket.com/images/i/bernhoftbret/python.png) box.)
+- [Git](https://git-scm.com/downloads)
+
+- [Python](https://www.python.org/downloads/) (When installing on Windows, make sure you check the ["Add python 3.xx to PATH"](https://hosting.photobucket.com/images/i/bernhoftbret/python.png) box.)
 
 ### Steps
 
 1. Install the above programs.
+
 2. Open a shell window (For Windows open PowerShell, for MacOS open Terminal & for Linux open your distro's terminal emulator).
+
 3. Clone this repository using `git` by running the following command; `git clone https://github.com/devbret/pihole-data-measurement-tools`.
+
 4. Navigate to the repo's directory by running; `cd pihole-data-measurement-tools`.
+
 5. Install the needed dependencies for running the script by running; `pip install -r requirements.txt`.

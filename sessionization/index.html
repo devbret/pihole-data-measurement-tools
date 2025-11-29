@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pi-hole DNS Sessions</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="title">
+        <div>
+          <h1>
+            Pi-hole DNS Sessions
+            <span style="opacity: 0.7">v2.0</span>
+          </h1>
+          <div class="sub">transitions.json + sessions.json</div>
+        </div>
+      </div>
+
+      <div class="header-stats" id="headerStats"></div>
+
+      <div class="header-actions">
+        <button class="btn small ghost" id="resetView">Reset view</button>
+        <button class="btn small ghost" id="reheat">Reheat</button>
+        <button class="btn small" id="exportPNG">Export PNG</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <aside class="panel left">
+        <div class="block">
+          <h3>
+            Data files
+            <span class="small mono">/out</span>
+          </h3>
+          <div class="desc">
+            Put these next to this HTML file (or update paths):
+          </div>
+          <div class="chips">
+            <div class="chip">out/transitions.json</div>
+            <div class="chip">out/sessions.json</div>
+            <div class="chip">out/transitions_by_client.json</div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>Filters & layout</h3>
+
+          <label>Search domain (keeps neighbors too)</label>
+          <input
+            id="searchDomain"
+            type="text"
+            placeholder="youtube, googlevideo, doubleclick..."
+          />
+
+          <label style="margin-top: 10px">Client</label>
+          <select id="clientSelect">
+            <option value="__all__">All clients</option>
+          </select>
+
+          <div class="row" style="margin-top: 10px">
+            <div>
+              <label>Min edge weight</label>
+              <input id="minEdge" type="range" min="1" max="50" value="1" />
+              <div class="small">>= <span id="minEdgeVal">1</span></div>
+            </div>
+            <div>
+              <label>Max nodes</label>
+              <input
+                id="maxNodes"
+                type="range"
+                min="25"
+                max="400"
+                value="140"
+              />
+              <div class="small"><= <span id="maxNodesVal">140</span></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <div>
+              <label>Layout strength</label>
+              <input
+                id="strength"
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value="0.6"
+              />
+              <div class="small"><span id="strengthVal">0.6</span></div>
+            </div>
+            <div>
+              <label>Link distance</label>
+              <input id="linkDist" type="range" min="20" max="220" value="90" />
+              <div class="small"><span id="linkDistVal">90</span> px</div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <div>
+              <label>Show labels</label>
+              <select id="labelMode">
+                <option value="auto" selected>Auto (top nodes)</option>
+                <option value="all">All nodes</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+            <div>
+              <label>Link opacity</label>
+              <input
+                id="linkOpacity"
+                type="range"
+                min="0.1"
+                max="1"
+                step="0.05"
+                value="0.7"
+              />
+              <div class="small"><span id="linkOpacityVal">0.7</span></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <button class="btn" id="clearFocusBtn">Clear focus</button>
+            <button class="btn" id="clearSearchBtn">Clear search</button>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>How to use</h3>
+          <ul class="small">
+            <li>Scroll/zoom with mousewheel or trackpad.</li>
+            <li>Drag nodes to pin; double-click to unpin.</li>
+            <li>Click node → context & sessions.</li>
+            <li><span class="mono">Shift</span>+Click → focus neighborhood.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main id="chart">
+        <div class="tooltip" id="tooltip"></div>
+
+        <div class="legend">
+          <span><b>Node size</b> = total queries</span>
+          <span><b>Link width</b> = transition count</span>
+          <span><b>Color</b> = out-in balance</span>
+        </div>
+
+        <div class="mini-hint">
+          <div><kbd>Shift</kbd> + click = focus</div>
+          <div><kbd>Double-click</kbd> node = unpin</div>
+        </div>
+      </main>
+
+      <aside class="panel right">
+        <div class="block">
+          <h3>Selection</h3>
+          <div id="selectionEmpty" class="small">
+            Click a node to inspect context.
+          </div>
+
+          <div id="selection" style="display: none">
+            <div class="kpi">
+              <div class="item">
+                <div class="val mono" id="selDomain">—</div>
+                <div class="lab">Domain</div>
+              </div>
+              <div class="item">
+                <div class="val" id="selCount">—</div>
+                <div class="lab">Total queries</div>
+              </div>
+              <div class="item">
+                <div class="val" id="selIn">—</div>
+                <div class="lab">Predecessors (in)</div>
+              </div>
+              <div class="item">
+                <div class="val" id="selOut">—</div>
+                <div class="lab">Successors (out)</div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="list-grid">
+              <div class="list">
+                <h4>Top predecessors</h4>
+                <div id="predList"></div>
+              </div>
+              <div class="list">
+                <h4>Top successors</h4>
+                <div id="succList"></div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div>
+              <h3 style="margin: 0 0 6px">Session footprint</h3>
+              <div class="small">
+                How often this domain appears across time.
+              </div>
+              <div class="sparkline" id="sparkline"></div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="row">
+              <button class="btn" id="focusBtn">Focus node</button>
+              <button class="btn" id="centerNodeBtn">Center on node</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <div>
+              <h3 style="margin: 0 0 8px">Sessions containing this domain</h3>
+              <div class="small" style="margin-bottom: 6px">
+                Showing top <span id="sessionLimitLabel">8</span> sessions by
+                relevance
+              </div>
+              <div id="sessionsList"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
