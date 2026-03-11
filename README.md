@@ -1,8 +1,8 @@
 # Pi-hole Data Measurement Tools
 
-![Heatmap of DNS queries, organized in ten minute intervals for each day of the week.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/975f6680-240c-4507-8c73-eb3a1f2b80ba.jpg)
+![Screenshot from an interactive network graph of DNS queries.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/14604989-fd2d-456d-a3ec-76e8798ed294.png)
 
-A collection of various software tools for analyzing DNS queries downloaded from Pi-hole as a CSV file.
+A collection of various data analysis software programs for exploring DNS queries downloaded from Pi-hole as a CSV file.
 
 ## Downloading Your Pi-hole Data
 
@@ -42,22 +42,42 @@ If you are having trouble transferring your DNS queries CSV file, it might be he
 
 To use any of the tools in this repo, you will need to ensure the transferred "my_dns_queries.csv" file is in the `/data` directory.
 
-## Set Up
+## Set Up Instructions
+
+Below are the required software programs and steps for setting up and launching applications with this repo.
 
 ### Programs Needed
 
 - [Git](https://git-scm.com/downloads)
 
-- [Python](https://www.python.org/downloads/) (When installing on Windows, make sure you check the ["Add python 3.xx to PATH"](https://hosting.photobucket.com/images/i/bernhoftbret/python.png) box.)
+- [Python](https://www.python.org/downloads/)
 
 ### Steps
 
-1. Install the above programs.
+1. Install the above programs
 
-2. Open a shell window (For Windows open PowerShell, for MacOS open Terminal & for Linux open your distro's terminal emulator).
+2. Open a terminal
 
-3. Clone this repository using `git` by running the following command; `git clone git@github.com:devbret/pihole-data-measurement-tools.git`.
+3. Clone this repository using `git` by running the following command: `git clone git@github.com:devbret/pihole-data-measurement-tools.git`
 
-4. Navigate to the repo's directory by running; `cd pihole-data-measurement-tools`.
+4. Navigate to the repo's directory by running: `cd pihole-data-measurement-tools`
 
-5. Install the needed dependencies for running the script by running; `pip install -r requirements.txt`.
+5. Install the needed dependencies for running the script: `pip install -r requirements.txt`
+
+6. Assuming you have downloaded Pi-hole DNS queries, the next step is to process your data using the `app.py` Python script located inside each subdirectory
+
+7. Next, launch the frontend UI for a given tool in order to explore your data
+
+## Other Considerations
+
+This repo is currently a work in progress and should be treated as such. As there are many critical improvements to make to most of the data analysis tools.
+
+### Development Goals
+
+Below are development goals to help map long-term progress for this project.
+
+1. Complete a `README.md` documentation file for each subdirectory
+
+2. Modernize or revamp the frontend `index.html` UI files for each program
+
+3. Create a cleaner folder structure for the whole repo
