@@ -2,11 +2,47 @@
 
 ![Screenshot from an interactive network graph of DNS queries.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/14604989-fd2d-456d-a3ec-76e8798ed294.png)
 
-A collection of various data analysis software programs for exploring DNS queries downloaded from Pi-hole as a CSV file.
+A suite of Python and frontend visualization tools for transforming exported Pi-hole DNS query logs into analyses of network activity, traffic patterns, domain behavior, client behavior and DNS metadata.
 
-## Downloading Your Pi-hole Data
+## Overview
 
-These instructions were originally sourced from ChatGPT. But have since been improved to handle possible challenges/errors and improve readability.
+The repo is organized as a suite of 10 independent subprojects, each focused on measuring, transforming or visualizing different aspects of DNS activity from a shared `.csv` dataset. Each tool combines a Python backend or data-processing script with its own frontend interface, allowing the same Pi-hole query data to be examined from multiple angles, such as domain activity, client behavior, reply times, query types and other DNS metrics. Overall, the project encourages practical experience with local network data, CSV processing, Python automation, web-based visualization and frontend experimentation.
+
+## Set Up Instructions
+
+Below are the required software programs and steps for setting up and launching applications with this repo on a Linux machine.
+
+### Programs Needed
+
+- [Git](https://git-scm.com/downloads)
+
+- [Python](https://www.python.org/downloads/)
+
+### Steps
+
+1. Install the above programs
+
+2. Open a terminal
+
+3. Clone this repository: `git clone git@github.com:devbret/pihole-data-measurement-tools.git`
+
+4. Navigate to the repo's directory: `cd pihole-data-measurement-tools`
+
+5. Create a virtual environment: `python3 -m venv venv`
+
+6. Activate your virtual environment: `source venv/bin/activate`
+
+7. Install the needed dependencies: `pip install -r requirements.txt`
+
+8. Download your Pi-hile DNS data using the instructions below
+
+9. Choose a subdirectory for processing and viewing your DNS data
+
+10. Exit the virtual environment: `deactivate`
+
+### Downloading Your Pi-hole Data
+
+These instructions have recently been improved to handle possible errors and improve readability.
 
 1 - **Access Pi-hole Admin Interface:**
 
@@ -40,37 +76,19 @@ If you are having trouble transferring your DNS queries CSV file, it might be he
 
 6 - **Analyze The Data:**
 
-To use any of the tools in this repo, you will need to ensure the transferred "my_dns_queries.csv" file is in the `/data` directory.
-
-## Set Up Instructions
-
-Below are the required software programs and steps for setting up and launching applications with this repo.
-
-### Programs Needed
-
-- [Git](https://git-scm.com/downloads)
-
-- [Python](https://www.python.org/downloads/)
-
-### Steps
-
-1. Install the above programs
-
-2. Open a terminal
-
-3. Clone this repository using `git` by running the following command: `git clone git@github.com:devbret/pihole-data-measurement-tools.git`
-
-4. Navigate to the repo's directory by running: `cd pihole-data-measurement-tools`
-
-5. Install the needed dependencies for running the script: `pip install -r requirements.txt`
-
-6. Assuming you have downloaded Pi-hole DNS queries, the next step is to process your data using the `app.py` Python script located inside each subdirectory
-
-7. Next, launch the frontend UI for a given tool in order to explore your data
+To use any of the tools in this repo, you will need to ensure the transferred `my_dns_queries.csv` file is in the `/data` directory.
 
 ## Other Considerations
 
-This repo is currently a work in progress and should be treated as such. As there are many critical improvements to make to most of the data analysis tools.
+This project repo is intended to demonstrate an ability to do the following:
+
+- Turn exported Pi-hole DNS query logs into visualizations to make network activity easier for exploring
+
+- Analyze DNS traffic patterns over time to reveal when queries happen most often and which domains are most active
+
+- Identify relationships between clients, domains, query types and other DNS metadata through frontend D3 graphs
+
+If you have any questions or would like to collaborate, please reach out either on GitHub or via [my website](https://bretbernhoft.com/).
 
 ### Development Goals
 
