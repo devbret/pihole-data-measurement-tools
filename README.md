@@ -44,23 +44,23 @@ Below are the required software programs and steps for setting up and launching 
 
 Once setup is complete, running any of the tools follows the same pattern. First navigate into the tool's subdirectory, run `python app.py` to process the shared dataset, start a simple web server from the same folder with `python3 -m http.server` and open `http://localhost:8000` in your browser to view the visualization.
 
-## Downloading Your Pi-hole Data
+## Downloading Pi-hole Data
 
-These instructions have been improved to handle possible errors and improve readability.
+These instructions have been improved to handle possible errors and enhance readability:
 
-1 - **Access Pi-hole Admin Interface:**
+1. **Access Pi-hole Admin Interface:**
 
 First, ensure you can access the Pi-hole admin interface. This is usually accessed via `http://<your-pi's-ip-address>/admin` from a browser within the same local area network.
 
-2 - **Use The Web Interface:**
+2. **Use The Web Interface:**
 
 Go to the "Query Log" section. Here, you can see recent queries, but for a complete download, you'll need to access the underlying data directly from the database.
 
-3 - **Access The Pi-hole Terminal:**
+3. **Access The Pi-hole Terminal:**
 
 SSH into your Raspberry Pi by using a command like `ssh username@<your-pi's-ip-address>` from a terminal on your computer. Make sure to replace <your-pi's-ip-address> with the actual IP address of your Raspberry Pi.
 
-4 - **Export DNS Queries:**
+4. **Export DNS Queries:**
 
 You then can interact with the database and export your DNS queries, for example, by running this command:
 
@@ -68,7 +68,7 @@ You then can interact with the database and export your DNS queries, for example
 
 This command sets up the output with headers, changes the mode to CSV for easy data handling, outputs the result to a file named "my_dns_queries.csv" and selects all records from the queries table.
 
-5 - **Retrieve The Exported File:**
+5. **Retrieve The Exported File:**
 
 After exporting you can use scp (secure copy) to transfer this file to your local machine. For example, you could run this command in a new terminal:
 
@@ -78,9 +78,9 @@ If you are having trouble transferring your DNS queries CSV file, it might be he
 
 > chmod 644 /home/username/my_dns_queries.csv
 
-6 - **Analyze The Data:**
+6. **Analyze The Data:**
 
-To use any of the tools in this repo, you will need to ensure the transferred `my_dns_queries.csv` file is in the `/data` directory.
+To use any of the tools in this repo, you will need to ensure the transferred `my_dns_queries.csv` file is in the `data` directory.
 
 ## Long-Term Development Goals
 
