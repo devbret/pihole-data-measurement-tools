@@ -2,13 +2,15 @@
 
 ![Screenshot from an interactive network graph of DNS queries.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/14604989-fd2d-456d-a3ec-76e8798ed294.png)
 
-A suite of Python and frontend visualization tools for transforming exported Pi-hole DNS query logs into analyses of network activity, traffic patterns, domain behavior, client behavior and DNS metadata.
+Suite of Python and frontend visualization tools for transforming exported Pi-hole DNS query logs into analyses of network activity, traffic patterns, domain behavior, client behavior and DNS metadata.
 
-## Overview
+## Application Overview
 
-The repo is organized as a suite of 10 independent subprojects, each focused on measuring, transforming or visualizing different aspects of DNS activity from a shared `.csv` dataset. Each tool combines a Python backend or data-processing script with its own frontend interface, allowing the same Pi-hole query data to be examined from multiple angles, such as domain activity, client behavior, reply times, query types and other DNS metrics. Overall, the project encourages practical experience with local network data, CSV processing, Python automation, web-based visualization and frontend experimentation.
+Organized as a suite of 10 independent subprojects, each focused on measuring, transforming or visualizing a different aspect of DNS activity from a shared `.csv` file. Every tool reads the same exported Pi-hole query log from the `data` directory, allowing a single export to be examined from numerous angles. Including domain activity, client behavior, reply times, query types and other DNS metadata. Each subproject is self-contained, wherein a Python script transforms Pi-hole data into a summarized dataset and a frontend renders results as an interactive D3 visualization.
 
-## Set Up Instructions
+Together, the tools turn a plain database export into a practical window on what is happening across a local network. Along the way, the project encourages hands-on experience with local network data, CSV processing, Python automation, web-based visualization and frontend experimentation. As each subproject stands alone, any one of them can be run, modified or extended without touching the others.
+
+## Basic Setup Instructions
 
 Below are the required software programs and steps for setting up and launching applications with this repo on a Linux machine.
 
@@ -36,13 +38,15 @@ Below are the required software programs and steps for setting up and launching 
 
 8. Download your Pi-hile DNS data using the instructions below
 
-9. Choose a subdirectory for processing and viewing your DNS data
+9. Choose a subdirectory for processing and visualizing your DNS data
 
-10. Exit the virtual environment: `deactivate`
+10. When finished, exit the virtual environment: `deactivate`
 
-### Downloading Your Pi-hole Data
+Once setup is complete, running any of the tools follows the same pattern. First navigate into the tool's subdirectory, run `python app.py` to process the shared dataset, start a simple web server from the same folder with `python3 -m http.server` and open `http://localhost:8000` in your browser to view the visualization.
 
-These instructions have recently been improved to handle possible errors and improve readability.
+## Downloading Your Pi-hole Data
+
+These instructions have been improved to handle possible errors and improve readability.
 
 1 - **Access Pi-hole Admin Interface:**
 
@@ -78,24 +82,34 @@ If you are having trouble transferring your DNS queries CSV file, it might be he
 
 To use any of the tools in this repo, you will need to ensure the transferred `my_dns_queries.csv` file is in the `/data` directory.
 
-## Other Considerations
+## Long-Term Development Goals
 
-This project repo is intended to demonstrate an ability to do the following:
+Below are development goals to help map progress over time for this project:
 
-- Turn exported Pi-hole DNS query logs into visualizations to make network activity easier for exploring
-
-- Analyze DNS traffic patterns over time to reveal when queries happen most often and which domains are most active
-
-- Identify relationships between clients, domains, query types and other DNS metadata through frontend D3 graphs
-
-If you have any questions or would like to collaborate, please reach out either on GitHub or via [my website](https://bretbernhoft.com/).
-
-### Development Goals
-
-Below are development goals to help map long-term progress for this project.
-
-1. Complete a `README.md` documentation file for each subdirectory
+1. Complete a `README.md` file for each subdirectory
 
 2. Modernize or revamp the frontend `index.html` UI files for each program
 
 3. Create a cleaner folder structure for the whole repo
+
+4. Consolidate dependency management so a single virtual environment reliably serves every subproject
+
+5. List all 10 tools with a description and screenshot of each in this `README.md` file
+
+In practice, these development goals mean giving each tool its own `README.md` file and an entry in this one, refreshing every frontend UI and reorganizing the repo so a cleaner folder layout and a single virtual environment serve all 10 subprojects.
+
+## Other Considerations
+
+This project repo is intended to demonstrate an ability to do the following:
+
+- Transform raw, exported Pi-hole data into a set of focused, interactive D3 visualizations for exploration in a browser
+
+- Reveal traffic patterns over time through hourly summaries, client counts and heatmaps
+
+- Analyze domain behavior by mapping subdomain hierarchies and tallying which top-level domains are blocked most often
+
+- Measure DNS performance by charting the distribution of reply times and identifying the slowest domains
+
+- Profile individual devices on the network by attributing queries to specific clients
+
+If you have any questions or would like to collaborate, please reach out either on GitHub or via [my website](https://bretbernhoft.com/).
