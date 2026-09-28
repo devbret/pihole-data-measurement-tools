@@ -2,6 +2,8 @@ import csv
 from collections import defaultdict
 import json
 
+BLOCKED_STATUSES = {'1', '4', '5', '6', '7', '8', '9', '10', '11', '15', '16', '18'}
+
 def extract_tld(domain):
     parts = domain.split('.')
     if len(parts) > 1:
@@ -14,7 +16,7 @@ def calculate_tld_blocks(csv_file):
     with open(csv_file, mode='r') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            if row['status'] == '2': 
+            if row['status'] in BLOCKED_STATUSES:
                 tld = extract_tld(row['domain'])
                 if tld:
                     tld_blocks[tld] += 1  
